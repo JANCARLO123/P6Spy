@@ -26,7 +26,6 @@ public class Person {
 
     public void setId(Long id) {
         this.id = id;
-
     }
 
     public String getName() {
@@ -37,8 +36,11 @@ public class Person {
         this.name = name;
     }
 
-
-    
-
-
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

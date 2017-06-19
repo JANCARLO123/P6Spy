@@ -11,7 +11,6 @@ public class MainApp {
     public static void main(String[] args) {
         Session session = null;
         Transaction transaction = null;
-        System.out.println("hola");
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.getTransaction();
@@ -23,6 +22,7 @@ public class MainApp {
 
             transaction.commit();
         } catch (Exception e) {
+            System.out.println(e);
             if (transaction != null) {
                 transaction.rollback();
             }

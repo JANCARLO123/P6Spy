@@ -19,22 +19,32 @@ public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory != null) {
+        if (sessionFactory == null) {
             try {
-
-
                 StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
-                Map<String, String> settings = new HashMap<String, String>();
+
+                Map<String, Object> settings = new HashMap<String, Object>();
                 settings.put(Environment.DRIVER, "com.p6spy.engine.spy.P6SpyDriver");
-                settings.put(Environment.URL, "jdbc:p6spy:mysql://localhost:3306/example1");
-                settings.put(Environment.USER, "root");
+                settings.put(Environment.URL, "jdbc:p6spy:mysql://127.0.0.1:3306/example1?useSSL=false&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC");
+
+                //settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+                //settings.put(Environment.URL, "jdbc:mysql://127.0.0.1:3306/example1?useSSL=false&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC");
+                settings.put(Environment.USER, "user");
                 settings.put(Environment.PASS, "Pa$$w0rd");
                 settings.put(Environment.HBM2DDL_AUTO, "update");
+                //settings.put(Environment.SHOW_SQL, true);
+
+
+
                 registryBuilder.applySettings(settings);
                 registry = registryBuilder.build();
+                // Create MetadataSources
                 MetadataSources sources = new MetadataSources(registry).addAnnotatedClass(Person.class);
+                // Create Metadata
                 Metadata metadata = sources.getMetadataBuilder().build();
+                // Create SessionFactory
                 sessionFactory = metadata.getSessionFactoryBuilder().build();
+
             } catch (Exception e) {
                 if (registry != null) {
                     StandardServiceRegistryBuilder.destroy(registry);
@@ -45,10 +55,11 @@ public class HibernateUtil {
         }
         return sessionFactory;
     }
-        public static void shutdown(){
-            if (registry != null) {
-                StandardServiceRegistryBuilder.destroy(registry);
-            }
+
+    public static void shutdown() {
+        if (registry != null) {
+            StandardServiceRegistryBuilder.destroy(registry);
         }
+    }
 }
 
